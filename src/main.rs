@@ -12,6 +12,8 @@ struct LotteryRules {
 }
 
 use rand::Rng;
+use getopts::Options;
+use std::env;
 
 fn main() {
     // See https://www.megamillions.com/how-to-play
@@ -30,19 +32,52 @@ fn main() {
         bonus_draws: 1,
     };
 
+    // Set up getopts
+    let args: Vec<String> = env::args().collect();
+    let program = args[0].clone();
+
+    let mut opts = Options::new();
+    opts.optflag("p", "", "Pick Powerball Numbers");
+    opts.optflag("m", "", "Pick Megamillions Numbers");
+    opts.optflag("h", "help", "print this help menu");
+    let matches = match opts.parse(&args[1..]) {
+        Ok(m) => { m }
+        Err(f) => { panic!(f.to_string()) }
+    };
+
+    // Print usage if '-h' is called
+    if matches.opt_present("h") {
+        print_usage(&program, opts);
+        return;
+    }
+
+    // Default to megamillions, and switch to powerball if '-p' is called
+    let game: &LotteryRules = if matches.opt_present("p") {
+        &powerball
+    } else {
+        &megamillions
+    };
 
 
     // Pick the winners
-    let winning_numbers = pick_em(powerball.high_ball, powerball.draws);
-    let bonus_numbers = pick_em(powerball.bonus_high_ball, powerball.bonus_draws);
+    let winning_numbers = pick_em(game.high_ball, powerball.draws);
+    let bonus_numbers = pick_em(game.bonus_high_ball, powerball.bonus_draws);
 
     print_winners(winning_numbers, bonus_numbers);
 }
 
+// Usage statement for getopts
+fn print_usage(program: &str, opts: Options) {
+    let brief = format!("Usage: {} [options]", program);
+    print!("{}", opts.usage(&brief));
+}
+
+// Pick a random number within the range created by 'high_ball'
 fn rand_pick(rand_max: i32) -> i32 {
    rand::thread_rng().gen_range(1..=rand_max)
 }
 
+// Loop through and pick the amount of numbers we specify
 fn pick_em(high_ball: i32, draws: i32) -> Vec<i32> {
     let mut picks = Vec::new();
 
