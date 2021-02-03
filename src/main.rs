@@ -60,8 +60,8 @@ fn main() {
 
 
     // Pick the winners
-    let winning_numbers = pick_em(game.high_ball, powerball.draws);
-    let bonus_numbers = pick_em(game.bonus_high_ball, powerball.bonus_draws);
+    let winning_numbers = pick_em(game.high_ball, game.draws);
+    let bonus_numbers = pick_em(game.bonus_high_ball, game.bonus_draws);
 
     print_winners(winning_numbers, bonus_numbers);
 }
