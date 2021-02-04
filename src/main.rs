@@ -4,7 +4,10 @@ use std::env;
 mod lottery_actions;
 
 fn main() {
+    //////////////////////////////////////////////////
     // Set up the rules for the games
+    //////////////////////////////////////////////////
+
     // See https://www.megamillions.com/how-to-play
     let megamillions = lottery_actions::LotteryRules {
         high_ball: 70,
@@ -21,7 +24,9 @@ fn main() {
         bonus_draws: 1,
     };
 
+    //////////////////////////
     // Set up getopts
+    //////////////////////////
     let args: Vec<String> = env::args().collect();
     let program = args[0].clone();
 
@@ -47,6 +52,10 @@ fn main() {
         &megamillions
     };
 
+
+    ///////////////////////////////
+    // Do the real work
+    ///////////////////////////////
 
     // Pick the winners
     let winning_numbers = lottery_actions::pick_em(game.high_ball, game.draws);
