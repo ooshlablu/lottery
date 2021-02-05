@@ -6,7 +6,7 @@ mod lottery_actions;
 // Set up the options
 /////////////////////////////////////////
 #[derive(StructOpt, Debug)]
-#[structopt(name = "lottery")] //version = "0.0.3")]
+#[structopt(name = "lottery")]
 struct Opts {
     /// Powerball Picks
     #[structopt(short, long)]
