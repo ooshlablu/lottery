@@ -5,7 +5,6 @@ mod lottery_actions;
 //////////////////////////////////////////
 // Set up the options
 /////////////////////////////////////////
-
 #[derive(StructOpt, Debug)]
 #[structopt(name = "lottery", version = "0.0.3")]
 struct Opts {
@@ -23,6 +22,7 @@ fn main() {
     // Pull the options in
     //////////////////////////////////////
     let opts = Opts::from_args();
+
 
     //////////////////////////////////////////////////
     // Set up the rules for the games
@@ -45,7 +45,9 @@ fn main() {
     };
 
 
-
+    //////////////////////////////////////i///////////
+    // Switch the game based on the flags passed in
+    //////////////////////////////////////////////////
     let game: &lottery_actions::LotteryRules = if opts.powerball {
         &powerball
     } else if opts.megamillions {

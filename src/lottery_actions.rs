@@ -14,6 +14,7 @@ pub struct LotteryRules {
 }
 
 // Pick a random number within the range created by 'high_ball'
+// Not public because the only thing using it is pick_em
 fn rand_pick(rand_max: i32) -> i32 {
    rand::thread_rng().gen_range(1..=rand_max)
 }
@@ -42,8 +43,9 @@ pub fn pick_em(high_ball: i32, draws: i32) -> Vec<i32> {
     picks
 }
 
+// Print the winners all nicey-nicey
 pub fn print_winners(winning_numbers: Vec<i32>, bonus_numbers: Vec<i32>) {
-    print!("Winning numbers are ");
+    println!("Winning numbers:");
 
     // Loop through the winning and bonus numbers. Format the output
     // with a '-' between the numbers, like how it would look on
