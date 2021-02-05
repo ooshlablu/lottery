@@ -48,7 +48,7 @@ pub fn print_winners(winning_numbers: Vec<i32>, bonus_numbers: Vec<i32>) {
     // Loop through the winning and bonus numbers. Format the output
     // with a '-' between the numbers, like how it would look on
     // a printout from a lottery machine
-    for winning_number in winning_numbers.iter() {
+    for winning_number in &winning_numbers {
         if winning_number == winning_numbers.last().unwrap() {
             print!("{} ", winning_number);
         } else {
@@ -56,7 +56,7 @@ pub fn print_winners(winning_numbers: Vec<i32>, bonus_numbers: Vec<i32>) {
         };
     }
 
-    for bonus_number in bonus_numbers.iter() {
+    for bonus_number in &bonus_numbers {
         if bonus_number == bonus_numbers.last().unwrap() {
             println!("({})", bonus_number);
         } else {
