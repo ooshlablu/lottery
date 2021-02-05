@@ -1,9 +1,29 @@
-use getopts::Options;
-use std::env;
+use structopt::StructOpt;
 
 mod lottery_actions;
 
+//////////////////////////////////////////
+// Set up the options
+/////////////////////////////////////////
+
+#[derive(StructOpt, Debug)]
+#[structopt(name = "lottery", version = "0.0.3")]
+struct Opts {
+    /// Powerball Picks
+    #[structopt(short, long)]
+    powerball: bool,
+
+    /// Megamillions Picks
+    #[structopt(short, long)]
+    megamillions: bool,
+}
+
 fn main() {
+    //////////////////////////////////////
+    // Pull the options in
+    //////////////////////////////////////
+    let opts = Opts::from_args();
+
     //////////////////////////////////////////////////
     // Set up the rules for the games
     //////////////////////////////////////////////////
@@ -24,30 +44,12 @@ fn main() {
         bonus_draws: 1,
     };
 
-    //////////////////////////
-    // Set up getopts
-    //////////////////////////
-    let args: Vec<String> = env::args().collect();
-    let program = args[0].clone();
 
-    let mut opts = Options::new();
-    opts.optflag("p", "", "Pick Powerball Numbers");
-    opts.optflag("m", "", "Pick Megamillions Numbers");
-    opts.optflag("h", "help", "print this help menu");
-    let matches = match opts.parse(&args[1..]) {
-        Ok(m) => { m }
-        Err(f) => { panic!(f.to_string()) }
-    };
 
-    // Print usage if '-h' is called
-    if matches.opt_present("h") {
-        print_usage(&program, opts);
-        return;
-    }
-
-    // Default to megamillions, and switch to powerball if '-p' is called
-    let game: &lottery_actions::LotteryRules = if matches.opt_present("p") {
+    let game: &lottery_actions::LotteryRules = if opts.powerball {
         &powerball
+    } else if opts.megamillions {
+        &megamillions
     } else {
         &megamillions
     };
@@ -62,10 +64,4 @@ fn main() {
     let bonus_numbers = lottery_actions::pick_em(game.bonus_high_ball, game.bonus_draws);
 
     lottery_actions::print_winners(winning_numbers, bonus_numbers);
-}
-
-// Usage statement for getopts
-fn print_usage(program: &str, opts: Options) {
-    let brief = format!("Usage: {} [options]", program);
-    print!("{}", opts.usage(&brief));
 }
