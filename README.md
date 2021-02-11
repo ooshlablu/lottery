@@ -1,14 +1,14 @@
 # Lottery
-Does quick picks for Megamillions and Powerball if you don't trust the machines at the quick stop.
+Does quick picks for U.S. Mega Millions and Powerball if you don't trust the machines at the corner store.
 
 ```
-user@host$ cargo run -q
+user@host:~$ lottery
 Winning numbers:
 8-19-24-54-64 (16)
 ```
 
 ```
-user@host$ cargo run -q -- --help
+user@host:~$ lottery --help
 lottery 0.0.3
 
 USAGE:
