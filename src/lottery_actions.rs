@@ -66,3 +66,22 @@ pub fn print_winners(winning_numbers: Vec<i32>, bonus_numbers: Vec<i32>) {
         };
     }
 }
+
+/////////////////////////////////////
+// Configure the tests for this mod
+/////////////////////////////////////
+
+#[cfg(test)]
+mod tests {
+  use super::*;
+
+  #[test]
+  // Test to make sure pick_em returns the amount we ask it to
+  fn test_pick_amount() {
+      let pick1_amount = pick_em(50, 5).len();
+      assert_eq!(pick1_amount, 5);
+
+      let pick2_amount = pick_em(50, 1).len();
+      assert_eq!(pick2_amount, 1);
+  }
+}
