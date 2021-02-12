@@ -21,6 +21,10 @@ fn rand_pick(rand_max: i32) -> i32 {
 
 // Loop through and pick the amount of numbers we specify
 pub fn pick_em(high_ball: i32, draws: i32) -> Vec<i32> {
+    if  high_ball < draws  {
+        panic!("You cannot create a full unique set of with the high ball and number of draws you specified. {} !>= {}!", high_ball, draws);
+    }
+
     let mut picks = Vec::new();
 
     let mut pick_num = 0;
@@ -91,6 +95,20 @@ mod tests {
 
         let pick2_amount = pick_em(50, 1).len();
         assert_eq!(pick2_amount, 1);
+    }
+
+    #[test]
+    // Test the minimum pick
+    fn test_pick() {
+        let numbers = vec![1, 2, 3, 4, 5];
+        assert_eq!(numbers, pick_em(5, 5));
+    }
+
+    #[test]
+    #[should_panic]
+    // This should break pick_em()
+    fn test_pick_invalid() {
+        pick_em(1, 5);
     }
 
     #[test]
