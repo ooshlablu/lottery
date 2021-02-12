@@ -65,5 +65,7 @@ fn main() {
     let winning_numbers = lottery_actions::pick_em(game.high_ball, game.draws);
     let bonus_numbers = lottery_actions::pick_em(game.bonus_high_ball, game.bonus_draws);
 
-    lottery_actions::print_winners(winning_numbers, bonus_numbers);
+    let print = lottery_actions::print_winners(winning_numbers, bonus_numbers);
+
+    print!("{}", print)
 }

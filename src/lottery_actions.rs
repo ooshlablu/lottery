@@ -44,27 +44,29 @@ pub fn pick_em(high_ball: i32, draws: i32) -> Vec<i32> {
 }
 
 // Print the winners all nicey-nicey
-pub fn print_winners(winning_numbers: Vec<i32>, bonus_numbers: Vec<i32>) {
-    println!("Winning numbers:");
+pub fn print_winners(winning_numbers: Vec<i32>, bonus_numbers: Vec<i32>) -> String {
+    let mut printout = format!("Winning numbers:\n");
 
     // Loop through the winning and bonus numbers. Format the output
     // with a '-' between the numbers, like how it would look on
     // a printout from a lottery machine
     for winning_number in &winning_numbers {
         if winning_number == winning_numbers.last().unwrap() {
-            print!("{} ", winning_number);
+            printout += &format!("{} ", winning_number);
         } else {
-            print!("{}-", winning_number);
+            printout += &format!("{}-", winning_number);
         };
     }
 
     for bonus_number in &bonus_numbers {
         if bonus_number == bonus_numbers.last().unwrap() {
-            println!("({})", bonus_number);
+            printout += &format!("({})\n", bonus_number);
         } else {
-            print!("({})-", bonus_number);
+            printout += &format!("({})-", bonus_number);
         };
     }
+
+    printout
 }
 
 /////////////////////////////////////
@@ -73,15 +75,31 @@ pub fn print_winners(winning_numbers: Vec<i32>, bonus_numbers: Vec<i32>) {
 
 #[cfg(test)]
 mod tests {
-  use super::*;
+    use super::*;
 
-  #[test]
-  // Test to make sure pick_em returns the amount we ask it to
-  fn test_pick_amount() {
-      let pick1_amount = pick_em(50, 5).len();
-      assert_eq!(pick1_amount, 5);
+    #[test]
+    // Test the random picker
+    fn test_picker() {
+        assert_eq!(rand_pick(1), 1);
+    }
 
-      let pick2_amount = pick_em(50, 1).len();
-      assert_eq!(pick2_amount, 1);
-  }
+    #[test]
+    // Test to make sure pick_em returns the amount we ask it to
+    fn test_pick_amount() {
+        let pick1_amount = pick_em(50, 5).len();
+        assert_eq!(pick1_amount, 5);
+
+        let pick2_amount = pick_em(50, 1).len();
+        assert_eq!(pick2_amount, 1);
+    }
+
+    #[test]
+    // Make sure the print out looks ok
+    fn test_printout() {
+        let numbers = vec![1, 2, 3, 4, 5];
+        let bonus_numbers = vec![1];
+
+        let output = print_winners(numbers, bonus_numbers);
+        assert!(output.contains("1-2-3-4-5 (1)"));
+    }
 }
