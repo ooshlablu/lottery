@@ -22,7 +22,7 @@ fn rand_pick(rand_max: i32) -> i32 {
 // Loop through and pick the amount of numbers we specify
 pub fn pick_em(high_ball: i32, draws: i32) -> Vec<i32> {
     if  high_ball < draws  {
-        panic!("You cannot create a full unique set of with the high ball and number of draws you specified. {} !>= {}!", high_ball, draws);
+        panic!("You cannot create a full unique set with the high ball and number of draws you specified. {} !>= {}!", high_ball, draws);
     }
 
     let mut picks = Vec::new();
