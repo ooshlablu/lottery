@@ -23,6 +23,8 @@ fn rand_pick(rand_max: i32) -> i32 {
 pub fn pick_em(high_ball: i32, draws: i32) -> Vec<i32> {
     if  high_ball < draws  {
         panic!("You cannot create a full unique set with the high ball and number of draws you specified. {} !>= {}!", high_ball, draws);
+    } else if draws < 1 {
+        panic!("You cannot have less than 1 draw! Draws: {}", draws);
     }
 
     let mut picks = Vec::new();
@@ -49,6 +51,10 @@ pub fn pick_em(high_ball: i32, draws: i32) -> Vec<i32> {
 
 // Print the winners all nicey-nicey
 pub fn print_winners(winning_numbers: Vec<i32>, bonus_numbers: Vec<i32>) -> String {
+    if winning_numbers.len() < 1 || bonus_numbers.len() < 1 {
+        panic!("You passed in an invalid amount of winning or bonus numbers. Each must be a Vec<i32> with at least 1 element. Winning numbers length: {}; Bonus numbers length: {}", winning_numbers.len(), bonus_numbers.len());
+    }
+
     let mut printout = format!("Winning numbers:\n");
 
     // Loop through the winning and bonus numbers. Format the output
@@ -88,6 +94,13 @@ mod tests {
     }
 
     #[test]
+    #[should_panic]
+    // Test an invalid range in the random picker
+    fn test_picker_invalid() {
+        rand_pick(0);
+    }
+
+    #[test]
     // Test to make sure pick_em returns the amount we ask it to
     fn test_pick_amount() {
         let pick1_amount = pick_em(50, 5).len();
@@ -95,6 +108,13 @@ mod tests {
 
         let pick2_amount = pick_em(50, 1).len();
         assert_eq!(pick2_amount, 1);
+    }
+
+    #[test]
+    #[should_panic]
+    // This situation is not possible, so it should panic
+    fn test_pick_amount_invalid() {
+        pick_em(50, 0);
     }
 
     #[test]
@@ -120,4 +140,15 @@ mod tests {
         let output = print_winners(numbers, bonus_numbers);
         assert!(output.contains("1-2-3-4-5 (1)"));
     }
+
+    #[test]
+    #[should_panic]
+    // What will an empty vector do?
+    fn test_printout_invalid() {
+        let invalid_winners = Vec::new();
+        let invalid_bonus = Vec::new();
+
+        print_winners(invalid_winners, invalid_bonus);
+    }
+
 }
