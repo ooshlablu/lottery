@@ -12,7 +12,7 @@ struct Opts {
     #[structopt(short, long)]
     powerball: bool,
 
-    /// Megamillions Picks (default)
+    /// Mega Millions Picks (default)
     #[structopt(short, long)]
     megamillions: bool,
 }

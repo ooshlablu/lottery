@@ -16,7 +16,7 @@ USAGE:
 
 FLAGS:
     -h, --help            Prints help information
-    -m, --megamillions    Megamillions Picks (default)
+    -m, --megamillions    Mega Millions Picks (default)
     -p, --powerball       Powerball Picks
     -V, --version         Prints version information
 ```
