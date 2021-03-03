@@ -1,7 +1,5 @@
 use structopt::StructOpt;
 
-mod lottery_actions;
-
 //////////////////////////////////////////
 // Set up the options
 /////////////////////////////////////////
@@ -29,7 +27,7 @@ fn main() {
     //////////////////////////////////////////////////
 
     // See https://www.megamillions.com/how-to-play
-    let megamillions = lottery_actions::LotteryRules {
+    let megamillions = lottery::LotteryRules {
         high_ball: 70,
         bonus_high_ball: 25,
         draws: 5,
@@ -37,7 +35,7 @@ fn main() {
     };
 
     // See https://www.masslottery.com/games/powerball/how-to-play
-    let powerball = lottery_actions::LotteryRules {
+    let powerball = lottery::LotteryRules {
         high_ball: 69,
         bonus_high_ball: 26,
         draws: 5,
@@ -48,12 +46,12 @@ fn main() {
     //////////////////////////////////////i///////////
     // Switch the game based on the flags passed in
     //////////////////////////////////////////////////
-    let game: &lottery_actions::LotteryRules = if opts.powerball {
-        &powerball
+    let game: lottery::LotteryRules = if opts.powerball {
+        powerball
     } else if opts.megamillions {
-        &megamillions
+        megamillions
     } else {
-        &megamillions
+        megamillions
     };
 
 
@@ -62,10 +60,5 @@ fn main() {
     ///////////////////////////////
 
     // Pick the winners
-    let winning_numbers = lottery_actions::pick_em(game.high_ball, game.draws);
-    let bonus_numbers = lottery_actions::pick_em(game.bonus_high_ball, game.bonus_draws);
-
-    let print = lottery_actions::print_winners(winning_numbers, bonus_numbers);
-
-    print!("{}", print)
+    lottery::run(game);
 }

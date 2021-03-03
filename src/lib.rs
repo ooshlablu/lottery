@@ -13,6 +13,11 @@ pub struct LotteryRules {
     pub bonus_draws: i32,
 }
 
+pub struct Winners {
+    pub winning_numbers: Vec<i32>,
+    pub bonus_numbers: Vec<i32>,
+}
+
 // Pick a random number within the range created by 'high_ball'
 // Not public because the only thing using it is pick_em
 fn rand_pick(rand_max: i32) -> i32 {
@@ -50,7 +55,9 @@ pub fn pick_em(high_ball: i32, draws: i32) -> Vec<i32> {
 }
 
 // Print the winners all nicey-nicey
-pub fn print_winners(winning_numbers: Vec<i32>, bonus_numbers: Vec<i32>) -> String {
+pub fn print_winners(winners: Winners) -> String {
+    let mut winning_numbers = winners.winning_numbers;
+    let mut bonus_numbers = winners.bonus_numbers;
     if winning_numbers.len() < 1 || bonus_numbers.len() < 1 {
         panic!("You passed in an invalid amount of winning or bonus numbers. Each must be a Vec<i32> with at least 1 element. Winning numbers length: {}; Bonus numbers length: {}", winning_numbers.len(), bonus_numbers.len());
     }
@@ -60,23 +67,31 @@ pub fn print_winners(winning_numbers: Vec<i32>, bonus_numbers: Vec<i32>) -> Stri
     // Loop through the winning and bonus numbers. Format the output
     // with a '-' between the numbers, like how it would look on
     // a printout from a lottery machine
+    let last_winner = winning_numbers.pop();
     for winning_number in &winning_numbers {
-        if winning_number == winning_numbers.last().unwrap() {
-            printout += &format!("{} ", winning_number);
-        } else {
-            printout += &format!("{}-", winning_number);
-        };
+        printout += &format!("{}-", winning_number);
     }
+    printout += &format!("{} ", last_winner.unwrap());
 
+    let last_bonus = bonus_numbers.pop();
     for bonus_number in &bonus_numbers {
-        if bonus_number == bonus_numbers.last().unwrap() {
-            printout += &format!("({})\n", bonus_number);
-        } else {
-            printout += &format!("({})-", bonus_number);
-        };
+        printout += &format!("({})-", bonus_number);
     }
+    printout += &format!("({})\n", last_bonus.unwrap());
 
     printout
+}
+
+pub fn run(lottery_rules: LotteryRules) {
+   let winning_numbers = pick_em(lottery_rules.high_ball, lottery_rules.draws);
+   let bonus_numbers = pick_em(lottery_rules.bonus_high_ball, lottery_rules.bonus_draws);
+
+   let winners = Winners {
+                     winning_numbers: winning_numbers,
+                     bonus_numbers: bonus_numbers,
+   };
+
+   print!("{}", print_winners(winners));
 }
 
 /////////////////////////////////////
@@ -134,10 +149,12 @@ mod tests {
     #[test]
     // Make sure the print out looks ok
     fn test_printout() {
-        let numbers = vec![1, 2, 3, 4, 5];
-        let bonus_numbers = vec![1];
+        let winners = Winners {
+            winning_numbers: vec![1, 2, 3, 4, 5],
+            bonus_numbers: vec![1],
+        };
 
-        let output = print_winners(numbers, bonus_numbers);
+        let output = print_winners(winners);
         assert!(output.contains("1-2-3-4-5 (1)"));
     }
 
@@ -145,10 +162,12 @@ mod tests {
     #[should_panic]
     // What will an empty vector do?
     fn test_printout_invalid() {
-        let invalid_winners = Vec::new();
-        let invalid_bonus = Vec::new();
+        let winners = Winners {
+            winning_numbers: Vec::new(),
+            bonus_numbers: Vec::new(),
+        };
 
-        print_winners(invalid_winners, invalid_bonus);
+        print_winners(winners);
     }
 
 }
