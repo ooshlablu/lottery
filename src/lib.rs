@@ -87,8 +87,8 @@ pub fn run(lottery_rules: LotteryRules) {
    let bonus_numbers = pick_em(lottery_rules.bonus_high_ball, lottery_rules.bonus_draws);
 
    let winners = Winners {
-                     winning_numbers: winning_numbers,
-                     bonus_numbers: bonus_numbers,
+       winning_numbers: winning_numbers,
+       bonus_numbers: bonus_numbers,
    };
 
    print!("{}", print_winners(winners));
